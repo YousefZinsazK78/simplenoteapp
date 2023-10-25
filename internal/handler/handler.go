@@ -1,15 +1,20 @@
 package handler
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type handler struct{}
+type handler struct {
+	database
+}
 
-func NewHandler() handler {
-	return handler{}
+func NewHandler(db *sql.DB) handler {
+	return handler{
+		database: db,
+	}
 }
 
 func (h handler) HandleGetNotes(ctx *gin.Context) {
