@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS user_tbl(
+     id SERIAL PRIMARY KEY,
+     username VARCHAR(30) NOT NULL UNIQUE,
+     password TEXT NOT NULL,
+     email varchar(170) NOT NULL,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
