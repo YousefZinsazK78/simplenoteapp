@@ -2,12 +2,12 @@ package database
 
 import "database/sql"
 
-type database struct {
+type Database struct {
 	db *sql.DB
 }
 
-func NewDatabase(db *sql.DB) *database {
-	return &database{
+func NewDatabase(db *sql.DB) *Database {
+	return &Database{
 		db: db,
 	}
 }

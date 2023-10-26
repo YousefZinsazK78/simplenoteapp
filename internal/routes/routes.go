@@ -25,11 +25,10 @@ func Init() *gin.Engine {
 	var (
 		db     = database.NewDatabase(conn)
 		router = gin.Default()
-		hndler = handler.NewHandler()
+		hndler = handler.NewHandler(*db)
 		apiV1  = router.Group("/api/v1")
 	)
 	router.Use(cors.Default())
-	router.Use(gin.Logger())
 
 	//simple note view
 	apiV1.GET("/notes", hndler.HandleGetNotes)

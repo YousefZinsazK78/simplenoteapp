@@ -1,19 +1,19 @@
 package handler
 
 import (
-	"database/sql"
 	"net/http"
+	"notegin/internal/database"
 
 	"github.com/gin-gonic/gin"
 )
 
 type handler struct {
-	database
+	database.Database
 }
 
-func NewHandler(db *sql.DB) handler {
+func NewHandler(db database.Database) handler {
 	return handler{
-		database: db,
+		Database: db,
 	}
 }
 
