@@ -10,10 +10,11 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 func Init() *gin.Engine {
-	if err := godotenv.Load(".env"); err != nil {
+	if err := godotenv.Load("./internal/config/.env"); err != nil {
 		log.Fatal(err)
 	}
 
@@ -37,9 +38,9 @@ func Init() *gin.Engine {
 	//todo : note crud
 	//todo : validation
 
-	//simple note view
+	//user crud
 	admin.GET("/users", hndler.HandleGetUsers)
-	admin.GET("/user/:username", hndler.HandleGetUserByUsername)
+	admin.GET("/user/username/:username", hndler.HandleGetUserByUsername)
 	admin.GET("/user/:id", hndler.HandleGetUserById)
 	admin.POST("/user", hndler.HandleInsertUser)
 	admin.PUT("/user", hndler.HandleUpdateUser)

@@ -104,6 +104,7 @@ func (h handler) HandleUpdateUser(ctx *gin.Context) {
 	err := h.userstorer.UpdateUser(pCtx, updateUserModel)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -119,10 +120,12 @@ func (h handler) HandleDeleteUser(ctx *gin.Context) {
 	userid, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 	err = h.userstorer.DeleteUser(pCtx, userid)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

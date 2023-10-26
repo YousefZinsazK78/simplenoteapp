@@ -73,7 +73,7 @@ func (u userstore) ViewUserByUsername(c context.Context, username string) (*mode
 }
 
 func (u userstore) UpdateUser(ctx context.Context, user models.UpdateUserParams) error {
-	stmt, err := u.db.PrepareContext(ctx, "UPDATE USER SET email=$1 WHERE id=$2")
+	stmt, err := u.db.PrepareContext(ctx, "UPDATE user_tbl SET email=$1 WHERE id=$2")
 	if err != nil {
 		return err
 	}
