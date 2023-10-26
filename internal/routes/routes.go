@@ -23,9 +23,11 @@ func Init() *gin.Engine {
 	}
 
 	var (
-		db     = database.NewDatabase(conn)
+		db        = database.NewDatabase(conn)
+		userstore = database.NewUserStore(*db)
+		hndler    = handler.NewHandler(userstore)
+
 		router = gin.Default()
-		hndler = handler.NewHandler(*db)
 		apiV1  = router.Group("/api/v1")
 	)
 	router.Use(cors.Default())
