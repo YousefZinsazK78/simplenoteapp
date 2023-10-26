@@ -28,14 +28,22 @@ func Init() *gin.Engine {
 		hndler    = handler.NewHandler(userstore)
 
 		router = gin.Default()
-		apiV1  = router.Group("/api/v1")
+		// apiV1  = router.Group("/api/v1")
+		admin = router.Group("/admin")
 	)
 	router.Use(cors.Default())
 
+	//todo : login,register => jwt token
+	//todo : note crud
+	//todo : validation
+
 	//simple note view
-	apiV1.GET("/notes", hndler.HandleGetNotes)
-	apiV1.POST("/notes", hndler.HandleGetNotes)
-	apiV1.PUT("/notes", hndler.HandleGetNotes)
+	admin.GET("/users", hndler.HandleGetUsers)
+	admin.GET("/user/:username", hndler.HandleGetUserByUsername)
+	admin.GET("/user/:id", hndler.HandleGetUserById)
+	admin.POST("/user", hndler.HandleInsertUser)
+	admin.PUT("/user", hndler.HandleUpdateUser)
+	admin.DELETE("/user/:id", hndler.HandleDeleteUser)
 
 	return router
 }

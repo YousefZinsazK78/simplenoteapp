@@ -63,7 +63,7 @@ func (u userstore) ViewUserByID(c context.Context, id int) (*models.User, error)
 	return &userm, nil
 }
 
-func (u userstore) ViewUsersByUsername(c context.Context, username string) (*models.User, error) {
+func (u userstore) ViewUserByUsername(c context.Context, username string) (*models.User, error) {
 	row := u.db.QueryRowContext(c, "SELECT * FROM user_tbl WHERE username=$1", username)
 	var userm models.User
 	if err := row.Scan(&userm.ID, &userm.Username, &userm.Password, &userm.Email, &userm.Created_at); err != nil {
