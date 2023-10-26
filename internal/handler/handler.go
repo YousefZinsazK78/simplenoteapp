@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"notegin/internal/database"
 	"notegin/internal/models"
+	"notegin/internal/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -80,9 +81,17 @@ func (h handler) HandleInsertUser(ctx *gin.Context) {
 		return
 	}
 
-	err := h.userstorer.InsertUser(pCtx, usermodel)
+	hashedPassword, err := utils.HashPassword([]byte(usermodel.Password))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	usermodel.Password = hashedPassword
+
+	err = h.userstorer.InsertUser(pCtx, usermodel)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
