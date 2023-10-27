@@ -28,12 +28,12 @@ func (h handler) HandleGetUsers(ctx *gin.Context) {
 	users, err := h.userstorer.ViewUsers(pCtx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": users,
 	})
-	return
 }
 
 func (h handler) HandleGetUserByUsername(ctx *gin.Context) {
@@ -43,12 +43,12 @@ func (h handler) HandleGetUserByUsername(ctx *gin.Context) {
 	user, err := h.userstorer.ViewUserByUsername(pCtx, ctx.Param("username"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": user,
 	})
-	return
 }
 
 func (h handler) HandleGetUserById(ctx *gin.Context) {
@@ -58,17 +58,18 @@ func (h handler) HandleGetUserById(ctx *gin.Context) {
 	userid, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	user, err := h.userstorer.ViewUserByID(pCtx, userid)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": user,
 	})
-	return
 }
 
 func (h handler) HandleInsertUser(ctx *gin.Context) {
@@ -97,7 +98,6 @@ func (h handler) HandleInsertUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": "insert successfully ✅",
 	})
-	return
 }
 
 func (h handler) HandleUpdateUser(ctx *gin.Context) {
@@ -119,7 +119,6 @@ func (h handler) HandleUpdateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": "update successfully ✅",
 	})
-	return
 }
 
 func (h handler) HandleDeleteUser(ctx *gin.Context) {
@@ -140,5 +139,4 @@ func (h handler) HandleDeleteUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": "delete successfully ✅",
 	})
-	return
 }

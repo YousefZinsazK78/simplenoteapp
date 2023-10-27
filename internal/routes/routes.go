@@ -5,6 +5,7 @@ import (
 	"log"
 	"notegin/internal/database"
 	"notegin/internal/handler"
+	"notegin/internal/middleware"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -38,6 +39,7 @@ func Init() *gin.Engine {
 	//todo : note crud
 	//todo : validation
 
+	admin.Use(middleware.JwtAuth())
 	//user crud
 	admin.GET("/users", hndler.HandleGetUsers)
 	admin.GET("/user/username/:username", hndler.HandleGetUserByUsername)
