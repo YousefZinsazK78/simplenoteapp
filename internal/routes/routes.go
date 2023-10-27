@@ -31,7 +31,7 @@ func Init() *gin.Engine {
 
 		router = gin.Default()
 		// apiV1  = router.Group("/api/v1")
-		admin = router.Group("/admin")
+		admin = router.Group("/admin", middleware.JwtAuth())
 	)
 	router.Use(cors.Default())
 
@@ -39,7 +39,6 @@ func Init() *gin.Engine {
 	//todo : note crud
 	//todo : validation
 
-	admin.Use(middleware.JwtAuth())
 	//user crud
 	admin.GET("/users", hndler.HandleGetUsers)
 	admin.GET("/user/username/:username", hndler.HandleGetUserByUsername)

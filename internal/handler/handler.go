@@ -26,14 +26,20 @@ func (h handler) HandleGetUsers(ctx *gin.Context) {
 	defer cancel()
 
 	users, err := h.userstorer.ViewUsers(pCtx)
+	// var user_id, ok = ctx.Get("user_id")
+	// if !ok {
+	// 	ctx.JSON(http.StatusInternalServerError, gin.H{"error": err, "userid": user_id})
+	// 	return
+	// }
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"result": users,
+			// "userid": user_id,
+		})
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"result": users,
-	})
 }
 
 func (h handler) HandleGetUserByUsername(ctx *gin.Context) {
@@ -42,7 +48,7 @@ func (h handler) HandleGetUserByUsername(ctx *gin.Context) {
 
 	user, err := h.userstorer.ViewUserByUsername(pCtx, ctx.Param("username"))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
