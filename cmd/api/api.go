@@ -15,5 +15,4 @@ func main() {
 	if err := router.Run("localhost:" + *port); err != nil {
 		log.Fatal(err)
 	}
-
 }
