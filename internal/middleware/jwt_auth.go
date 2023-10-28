@@ -13,33 +13,27 @@ func JwtAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authrozationHeader := c.Request.Header.Get("Authorization")
 		if !strings.HasPrefix(authrozationHeader, "Bearer") {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized! has not bearer prefix"})
 			return
 		}
 		tokenString := strings.TrimPrefix(authrozationHeader, "Bearer ")
 		claims, err := utils.GetClaimsFromJwtToken(tokenString)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
 			return
 		}
-
-		var exp_time, ok = claims["ExpiresAt"]
+		var exp_time, ok = claims["exp"]
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
 			return
 		}
-		var exp, okN = exp_time.(int64)
+		var exp, okN = exp_time.(float64)
 		if !okN {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized! token is not there!"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!"})
 			return
 		}
-		if time.Now().Unix() > exp {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!  Token Expired!!"})
-			c.Abort()
+		if time.Now().Unix() > int64(exp) {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized!  Token Expired!!"})
 			return
 		}
 		c.Set("user_id", claims["user_id"])
