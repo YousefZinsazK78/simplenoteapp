@@ -10,7 +10,7 @@ type NoteStorer interface {
 	GetAll(context.Context) ([]models.Note, error)
 	GetByID(context.Context, int) (*models.Note, error)
 	GetByTitle(context.Context, string) (*models.Note, error)
-	Update(context.Context, models.UpdateNoteParams)
+	Update(context.Context, models.UpdateNoteParams) error
 	DeleteByID(context.Context, int) error
 }
 

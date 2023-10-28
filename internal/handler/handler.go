@@ -13,11 +13,13 @@ import (
 
 type handler struct {
 	userstorer database.UserStorer
+	noteStorer database.NoteStorer
 }
 
-func NewHandler(userstorer database.UserStorer) handler {
+func NewHandler(userstorer database.UserStorer, noteStorer database.NoteStorer) handler {
 	return handler{
 		userstorer: userstorer,
+		noteStorer: noteStorer,
 	}
 }
 
@@ -200,5 +202,50 @@ func (h handler) HandleDeleteUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": "delete successfully ✅",
+	})
+}
+
+func (h handler) HandleGetNotes(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+
+	note, err := h.noteStorer.GetAll(pCtx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, note)
+}
+func (h handler) HandleGetNoteTitle(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+
+	note, err := h.noteStorer.GetByTitle(pCtx, ctx.Param("title"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, note)
+}
+func (h handler) HandleCreateNote(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+
+	var notemodel models.Note
+	if err := ctx.ShouldBind(&notemodel); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	err := h.noteStorer.Insert(pCtx, notemodel)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"result": "Note inserted Successfully 🥳",
 	})
 }

@@ -27,19 +27,23 @@ func Init() *gin.Engine {
 	var (
 		db        = database.NewDatabase(conn)
 		userstore = database.NewUserStore(*db)
-		hndler    = handler.NewHandler(userstore)
+		notestore = database.NewNoteStore(*db)
+		hndler    = handler.NewHandler(userstore, notestore)
 
 		router = gin.Default()
 		// apiV1  = router.Group("/api/v1")
 		admin = router.Group("/admin")
 		auth  = router.Group("/auth")
+		note  = router.Group("/note")
 	)
 	router.Use(cors.Default())
 	auth.POST("/signin", hndler.HandleSignIn)
 	auth.POST("/signup", hndler.HandleSignUp)
 
-	//todo : note crud
-	//todo : validation
+	//note crud
+	note.GET("/all", hndler.HandleGetNotes)
+	note.GET("/title/:title", hndler.HandleGetNoteTitle)
+	note.POST("/create", hndler.HandleCreateNote)
 
 	admin.Use(middleware.JwtAuth())
 	//user crud
