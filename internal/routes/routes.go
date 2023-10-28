@@ -40,6 +40,7 @@ func Init() *gin.Engine {
 	auth.POST("/signin", hndler.HandleSignIn)
 	auth.POST("/signup", hndler.HandleSignUp)
 
+	note.Use(middleware.JwtAuth())
 	//note crud
 	note.GET("/all", hndler.HandleGetNotes)
 	note.GET("/title/:title", hndler.HandleGetNoteTitle)

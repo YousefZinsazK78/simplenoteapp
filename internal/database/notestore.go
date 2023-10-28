@@ -64,7 +64,7 @@ func (n noteStore) GetByID(ctx context.Context, id int) (*models.Note, error) {
 }
 
 func (n noteStore) GetByTitle(ctx context.Context, title string) (*models.Note, error) {
-	row := n.db.QueryRowContext(ctx, "SELECT * FROM note_tbl WHERE title=$1", title)
+	row := n.db.QueryRowContext(ctx, "SELECT * FROM note_tbl WHERE title = $1 ", title)
 	var notemodel models.Note
 	if err := row.Scan(&notemodel.ID, &notemodel.Title, &notemodel.Body, &notemodel.UserID, &notemodel.CreatedAt); err != nil {
 		return nil, err

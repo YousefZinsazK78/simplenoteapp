@@ -238,7 +238,12 @@ func (h handler) HandleCreateNote(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-
+	userid, ok := ctx.Get("user_id")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "there's no userid"})
+		return
+	}
+	notemodel.UserID = int(userid.(float64))
 	err := h.noteStorer.Insert(pCtx, notemodel)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
