@@ -229,6 +229,23 @@ func (h handler) HandleGetNoteTitle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, note)
 }
+
+func (h handler) HandleGetNoteByID(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	note, err := h.noteStorer.GetByID(pCtx, id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, note)
+}
 func (h handler) HandleCreateNote(ctx *gin.Context) {
 	var pCtx, cancel = context.WithCancel(context.Background())
 	defer cancel()

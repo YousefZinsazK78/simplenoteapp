@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"notegin/internal/models"
 )
 
@@ -9,7 +10,7 @@ type NoteStorer interface {
 	Insert(context.Context, models.Note) error
 	GetAll(context.Context) ([]models.Note, error)
 	GetByID(context.Context, int) (*models.Note, error)
-	GetByTitle(context.Context, string) (*models.Note, error)
+	GetByTitle(context.Context, string) ([]models.Note, error)
 	Update(context.Context, models.UpdateNoteParams) error
 	DeleteByID(context.Context, int) error
 }
@@ -63,17 +64,34 @@ func (n noteStore) GetByID(ctx context.Context, id int) (*models.Note, error) {
 	return &notemodel, nil
 }
 
-func (n noteStore) GetByTitle(ctx context.Context, title string) (*models.Note, error) {
-	row := n.db.QueryRowContext(ctx, "SELECT * FROM note_tbl WHERE title LIKE '%$1%'", title)
-	var notemodel models.Note
-	if err := row.Scan(&notemodel.ID, &notemodel.Title, &notemodel.Body, &notemodel.UserID, &notemodel.CreatedAt); err != nil {
+func (n noteStore) GetByTitle(ctx context.Context, title string) ([]models.Note, error) {
+	stmt, err := n.db.PrepareContext(ctx, "SELECT * FROM note_tbl WHERE title LIKE $1")
+	if err != nil {
 		return nil, err
 	}
-	return &notemodel, nil
+
+	rows, err := stmt.Query("%" + title + "%")
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	var notemodels []models.Note
+	// Iterate over the result set
+	for rows.Next() {
+		var note models.Note
+		err := rows.Scan(&note.ID, &note.Title, &note.Body, &note.UserID, &note.CreatedAt)
+		if err != nil {
+			panic(err)
+		}
+		notemodels = append(notemodels, note)
+		fmt.Print(note)
+	}
+	return notemodels, nil
 }
 
-func (u noteStore) Update(ctx context.Context, note models.UpdateNoteParams) error {
-	stmt, err := u.db.PrepareContext(ctx, "UPDATE note_tbl SET title=$1 WHERE id=$2")
+func (n noteStore) Update(ctx context.Context, note models.UpdateNoteParams) error {
+	stmt, err := n.db.PrepareContext(ctx, "UPDATE note_tbl SET title=$1 WHERE id=$2")
 	if err != nil {
 		return err
 	}

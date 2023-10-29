@@ -43,6 +43,7 @@ func Init() *gin.Engine {
 	//note crud
 	note.GET("/all", hndler.HandleGetNotes)
 	note.GET("/title/:title", hndler.HandleGetNoteTitle)
+	note.GET("/:id", hndler.HandleGetNoteByID)
 	note.POST("/create", hndler.HandleCreateNote)
 	note.PUT("/update", hndler.HandleUpdateNote)
 	note.DELETE("/delete/:id", hndler.HandleDeleteNote)
