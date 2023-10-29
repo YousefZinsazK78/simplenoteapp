@@ -254,3 +254,24 @@ func (h handler) HandleCreateNote(ctx *gin.Context) {
 		"result": "Note inserted Successfully 🥳",
 	})
 }
+
+func (h handler) HandleUpdateNote(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+
+	var updatemodel models.UpdateNoteParams
+	if err := ctx.ShouldBind(&updatemodel); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	err := h.noteStorer.Update(pCtx, updatemodel)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"result": "Note updated Successfully 🥳",
+	})
+}
