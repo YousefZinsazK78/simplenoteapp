@@ -10,4 +10,9 @@ some of this features of note app
 3. login / register / jwt auth middleware
 4. gin framework
 5. migration file
-6. 
+
+
+## features
+   - crud note (create , view , update , delete)
+   - crud user (create, view, update, delete)
+   - jwt authentication (sign in / sign up)
