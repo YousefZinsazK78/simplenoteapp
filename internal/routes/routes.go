@@ -31,10 +31,9 @@ func Init() *gin.Engine {
 		hndler    = handler.NewHandler(userstore, notestore)
 
 		router = gin.Default()
-		// apiV1  = router.Group("/api/v1")
-		admin = router.Group("/admin")
-		auth  = router.Group("/auth")
-		note  = router.Group("/note")
+		admin  = router.Group("/admin")
+		auth   = router.Group("/auth")
+		note   = router.Group("/note")
 	)
 	router.Use(cors.Default())
 	auth.POST("/signin", hndler.HandleSignIn)
