@@ -46,6 +46,7 @@ func Init() *gin.Engine {
 	note.GET("/title/:title", hndler.HandleGetNoteTitle)
 	note.POST("/create", hndler.HandleCreateNote)
 	note.PUT("/update", hndler.HandleUpdateNote)
+	note.DELETE("/delete/:id", hndler.HandleDeleteNote)
 
 	admin.Use(middleware.JwtAuth())
 	//user crud

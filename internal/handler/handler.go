@@ -275,3 +275,23 @@ func (h handler) HandleUpdateNote(ctx *gin.Context) {
 		"result": "Note updated Successfully 🥳",
 	})
 }
+
+func (h handler) HandleDeleteNote(ctx *gin.Context) {
+	var pCtx, cancel = context.WithCancel(context.Background())
+	defer cancel()
+
+	var id, err = strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	err = h.noteStorer.DeleteByID(pCtx, id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"result": "Note updated Successfully 🥳",
+	})
+}
