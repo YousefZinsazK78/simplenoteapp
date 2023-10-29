@@ -268,7 +268,7 @@ func (h handler) HandleCreateNote(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"result": "Note inserted Successfully 🥳",
+		"result": "Note insert Successfully 🥳",
 	})
 }
 
@@ -289,7 +289,7 @@ func (h handler) HandleUpdateNote(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"result": "Note updated Successfully 🥳",
+		"result": "Note update Successfully 🥳",
 	})
 }
 
@@ -309,6 +309,6 @@ func (h handler) HandleDeleteNote(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"result": "Note updated Successfully 🥳",
+		"result": "Note delete Successfully 🥳",
 	})
 }
