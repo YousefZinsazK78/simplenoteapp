@@ -1,0 +1,14 @@
+{{template "header.tmpl" .}}
+    <h1> Sign up </h1>
+     <form method="POST" action="http://localhost:8000/auth/signup">
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label">Username</label>
+            <input class="form-control" id="exampleInputUsername1" name="username" type="text" placeholder="username" aria-label="default input example">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+{{template "footer.tmpl" .}}

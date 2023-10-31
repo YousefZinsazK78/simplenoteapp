@@ -19,6 +19,11 @@ type UserParams struct {
 	Password string `json:"password"`
 }
 
+type UserParamsForm struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
 type JwtUserClaims struct {
 	Userid int `json:"user_id"`
 	jwt.RegisteredClaims
