@@ -1,0 +1,13 @@
+{{template "header.tmpl" .}}
+     <form method="POST" action="http://localhost:8000/note/create">
+          <div class="row">
+               <div class="col">
+                    <input type="text" class="form-control" placeholder="title" name="title">
+               </div>
+               <div class="col">
+                    <input type="text" class="form-control" placeholder="title" name="body">
+               </div>
+               <button type="submit" class="btn btn-success">Create</button>
+          </div>
+     </form>
+{{template "footer.tmpl" .}}

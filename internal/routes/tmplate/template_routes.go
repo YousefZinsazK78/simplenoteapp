@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"notegin/internal/database"
 	"notegin/internal/handler"
-	"notegin/internal/middleware"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -32,9 +31,9 @@ func Init() *gin.Engine {
 		hndler    = handler.NewHandler(userstore, notestore)
 
 		router = gin.Default()
-		admin  = router.Group("/admin")
-		auth   = router.Group("/auth")
-		note   = router.Group("/note")
+		// admin  = router.Group("/admin")
+		// auth = router.Group("/auth")
+		note = router.Group("/note")
 	)
 	router.Use(cors.Default())
 	router.LoadHTMLGlob("./internal/templates/*.tmpl")
@@ -45,29 +44,33 @@ func Init() *gin.Engine {
 			"title": "Main Note Page",
 		})
 	})
-	auth.GET("/tmplsignin", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "login.tmpl", nil)
+	router.GET("/create", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "create.tmpl", nil)
 	})
-	auth.POST("/signin", hndler.HandleTmplSignIn)
-	auth.POST("/signup", hndler.HandleSignUp)
 
-	note.Use(middleware.JwtAuth())
+	// auth.GET("/tmplsignin", func(ctx *gin.Context) {
+	// 	ctx.HTML(http.StatusOK, "login.tmpl", nil)
+	// })
+	// auth.POST("/signin", hndler.HandleTmplSignIn)
+	// auth.POST("/signup", hndler.HandleSignUp)
+
+	// note.Use(middleware.JwtAuth())
 	//note crud
-	note.GET("/all", hndler.HandleGetNotes)
+	note.GET("/all", hndler.HandleTmplGetNotes)
 	note.GET("/title/:title", hndler.HandleGetNoteTitle)
 	note.GET("/:id", hndler.HandleGetNoteByID)
-	note.POST("/create", hndler.HandleCreateNote)
+	note.POST("/create", hndler.HandleTmplCreateNote)
 	note.PUT("/update", hndler.HandleUpdateNote)
 	note.DELETE("/delete/:id", hndler.HandleDeleteNote)
 
-	admin.Use(middleware.JwtAuth())
-	//user crud
-	admin.GET("/users", hndler.HandleGetUsers)
-	admin.GET("/user/username/:username", hndler.HandleGetUserByUsername)
-	admin.GET("/user/:id", hndler.HandleGetUserById)
-	admin.POST("/user", hndler.HandleInsertUser)
-	admin.PUT("/user", hndler.HandleUpdateUser)
-	admin.DELETE("/user/:id", hndler.HandleDeleteUser)
+	// admin.Use(middleware.JwtAuth())
+	// //user crud
+	// admin.GET("/users", hndler.HandleGetUsers)
+	// admin.GET("/user/username/:username", hndler.HandleGetUserByUsername)
+	// admin.GET("/user/:id", hndler.HandleGetUserById)
+	// admin.POST("/user", hndler.HandleInsertUser)
+	// admin.PUT("/user", hndler.HandleUpdateUser)
+	// admin.DELETE("/user/:id", hndler.HandleDeleteUser)
 
 	return router
 }
